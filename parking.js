@@ -63,7 +63,7 @@ const households = {
   }
 }
 
-function getNthDays(date, dayOfWeek) {
+const getNthDays = function(date, dayOfWeek) {
   let days = [];
 
   let daysInMonth = () => {
@@ -81,7 +81,7 @@ function getNthDays(date, dayOfWeek) {
   return days;
 }
 
-function sendReminders(message, numbers) {
+const sendReminders = function(message, numbers) {
   if (message.length < 100) {
     numbers.forEach((number) => {
       client.sendMessage({
@@ -110,4 +110,4 @@ function sendReminders(message, numbers) {
 //   };
 // }
 
-checkAndSend();
+// checkAndSend();
