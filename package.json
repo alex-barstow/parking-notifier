@@ -1,0 +1,15 @@
+{
+  "name": "parking-notification",
+  "version": "1.0.0",
+  "description": "sends SMS parking reminders with twilio",
+  "main": "parking.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alex Barstow",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "twilio": "^2.11.1"
+  }
+}
