@@ -63,6 +63,8 @@ const households = {
   }
 }
 
+// Returns an array of {Date} objects representing all of a given dayOfTheWeek
+// (integer, 1 = Mon, 2 = Tues, 3 = Wed, etc) in the month of the provided {date}
 const getNthDays = (date, dayOfWeek) => {
   let days = [];
 
@@ -77,10 +79,12 @@ const getNthDays = (date, dayOfWeek) => {
       days.push(day);
     }
   }
-  console.log(days);
+  console.log(dayOfWeek, days);
   return days;
 }
 
+// Sends a request to Twilio to send a message to all phone numbers in the
+// provided numbers array
 const sendReminders = (message, numbers) => {
   if (message.length < 100) {
     numbers.forEach((number) => {
@@ -95,19 +99,30 @@ const sendReminders = (message, numbers) => {
   }
 }
 
-// Needs refactor to allow for multiple households
-// function checkAndSendHarvard() {
-//   const now = new Date();
-//   const mondays = getNthDays(now, 1);
-//   const tuesdays = getNthDays(now, 2);
-//
-//   if (now.getDate() === mondays[0].getDate()) {
-//     sendMessage('Street Sweeping tonight! Park on OUR side.', households.harvardStreetNumbers)
-//   } else if(now.getDate() === tuesdays[0].getDate()) {
-//     sendMessage('Street Sweeping tonight! Park on the OTHER side.', households.harvardStreetNumbers)
-//   else {
-//     console.log('Wrong day, no message sent.');
-//   };
-// }
+// Iterates through {households} object, checks if any reminders should be sent
+// at the present time, and sends them with the correct message if their specific
+// conditions are met
+const checkAndSend = (households) => {
+  for (var household in households) {
+    if (households.hasOwnProperty(household)) {
+      const reminders = households[household].reminders;
 
-// checkAndSend();
+      for (var reminder in reminders) {
+        if (reminders.hasOwnProperty(reminder)) {
+          const shouldSendReminder = households[household].reminders[reminder].condition();
+
+          if (shouldSendReminder) {
+            const message = households[household].reminders[reminder].message;
+            const numbers = households[household].numbers;
+
+            sendReminders(message, numbers);
+          } else {
+            console.log('Wrong day. No messages sent.');
+          }
+        }
+      }
+    }
+  }
+}
+
+checkAndSend(households);
