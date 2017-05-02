@@ -24,7 +24,7 @@ const sendReminders = (message, numbers) => {
     body: message
   })
     .then(message => console.log('Message success: ', number))
-    .catch(err => console.log('Something went wrong:\n', err)));
+    .catch(err => console.log('Message Failure:\n', err)));
 
   return Promise.all(textMessages);
 };
@@ -141,10 +141,9 @@ const checkAndSend = households => {
     return Promise.all(remindersToSend);
   });
 
-  return Promise.all(householdReminders)
-    .then(() => {
-      console.timeEnd('Parking Reminders');
-    });
+  return Promise.all(householdReminders);
 };
 
-checkAndSend(households);
+checkAndSend(households).then(() => {
+  console.timeEnd('Total Time:');
+});
