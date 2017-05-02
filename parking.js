@@ -1,9 +1,33 @@
 'use strict'
 
-const dotenv = require('dotenv').config();
-const twilio = require('twilio');
+console.time('Total Time:');
 
-const sendMessage = twilio(process.env.accountSID, process.env.authToken).sendMessage;
+const dotenv = require('dotenv').config();
+const Promise = require('bluebird');
+const twilio = require('twilio')(process.env.accountSID, process.env.authToken);
+
+
+// Sends a request to Twilio to send a 'message' to all phone numbers in the
+// provided [numbers] array
+const sendReminders = (message, numbers) => {
+  if (message.length >= 100) {
+    console.log('Message was too long. Must be under 100 characters.');
+    return;
+  };
+
+  const sendMessage = Promise.promisify(twilio.sendMessage);
+
+  // Builds array of promise chains that send text messages
+  let textMessages = numbers.map(number => sendMessage({
+    to: number,
+    from: '+15082834493',
+    body: message
+  })
+    .then(message => console.log('Message success: ', number))
+    .catch(err => console.log('Something went wrong:\n', err)));
+
+  return Promise.all(textMessages);
+};
 
 // Returns an array of {Date} objects representing all of a given dayOfTheWeek
 // (integer, 1 = Mon, 2 = Tues, 3 = Wed, etc) in the month of the provided {date}
@@ -21,31 +45,9 @@ const getNthDays = (date, dayOfWeek) => {
       days.push(day);
     };
   }
-  console.log(dayOfWeek, days);
+  console.log('Messages should be sent on the following days:\n', days);
   return days;
 }
-
-// Sends a request to Twilio to send a 'message' to all phone numbers in the
-// provided [numbers] array
-const sendReminders = (message, numbers) => {
-  if (message.length >= 100) {
-    console.log('Message was too long. Must be under 100 characters.');
-    return;
-  };
-
-  // Sends texts messages
-  numbers.forEach(number => sendMessage({
-    to: number,
-    from: '+15082834493',
-    body: message
-  }, (err, message) => {
-    if (err) {
-      console.log('Something went wrong:\n', err);
-    } else {
-      console.log('message sent to ', number);
-    }
-  }));
-};
 
 /* Stores all information about each household
  * - phone numbers of those to receive notifications
@@ -56,9 +58,9 @@ const households = {
   wallaceStreet: {
     numbers: [
       process.env.alex,
-      process.env.pat,
       process.env.julia,
-      process.env.peter,
+      process.env.pat,
+      process.env.peter
     ],
     reminders: {
       firstAndThirdMonday: {
@@ -113,17 +115,17 @@ const households = {
 }
 
 /* Iterates through {households} object, checks if any reminders should be sent
- * at the present time, and sends them with the correct message if their specific
+ * at the present time, and returns a promise chain if their specific
  * conditions are met
  */
 const checkAndSend = households => {
 
   // Loop through each household
-  Object.keys(households).forEach(household => {
+  let householdReminders = Object.keys(households).map(household => {
     const reminders = households[household].reminders;
 
-    // Loop through each households reminders
-    Object.keys(reminders).forEach(reminder => {
+    // Loop through each household's reminders
+    let remindersToSend = Object.keys(reminders).map(reminder => {
       const shouldSendReminder = households[household]
         .reminders[reminder].condition();
 
@@ -132,10 +134,17 @@ const checkAndSend = households => {
         const message = households[household].reminders[reminder].message;
         const numbers = households[household].numbers;
 
-        sendReminders(message, numbers);
+        return sendReminders(message, numbers);
       };
     });
+
+    return Promise.all(remindersToSend);
   });
+
+  return Promise.all(householdReminders)
+    .then(() => {
+      console.timeEnd('Parking Reminders');
+    });
 };
 
 checkAndSend(households);
