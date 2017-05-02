@@ -99,7 +99,7 @@ const households = {
 
           return now.getDate() === mondays[0].getDate();
         },
-        message: 'Street Sweeping tonight! Park on the OTHER side.'
+        message: 'Street Sweeping tonight! Park on OUR side.'
       },
       firstTuesday: {
         condition: function() {
@@ -108,7 +108,7 @@ const households = {
 
           return now.getDate() === tuesdays[0].getDate();
         },
-        message: 'Street Sweeping tonight! Park on OUR side.'
+        message: 'Street Sweeping tonight! Park on the OTHER side.'
       }
     }
   }
