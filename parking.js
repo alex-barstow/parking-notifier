@@ -45,8 +45,15 @@ const getNthDays = (date, dayOfWeek) => {
       days.push(day);
     };
   }
-  console.log('Messages should be sent on the following days:\n', days);
+
   return days;
+}
+
+// Returns the {Date} before the provided {date}, even if the day before is
+// in the previous month
+const dayBefore = (date) => {
+  date.setDate(date.getDate() - 1);
+  return date;
 }
 
 /* Stores all information about each household
@@ -63,23 +70,23 @@ const households = {
       process.env.peter
     ],
     reminders: {
-      firstAndThirdMonday: {
-        condition: function() {
-          const now = new Date();
-          const mondays = getNthDays(now, 1);
-
-          return now.getDate() === mondays[0].getDate() ||
-                 now.getDate() === mondays[2].getDate();
-        },
-        message: 'Street Sweeping tonight! Park on the OTHER side.'
-      },
-      secondAndFourthTuesday: {
+      firstAndThirdTuesday: {
         condition: function() {
           const now = new Date();
           const tuesdays = getNthDays(now, 2);
 
-          return now.getDate() === tuesdays[1].getDate() ||
-                 now.getDate() === tuesdays[3].getDate();
+          return now.getDate() === dayBefore(tuesdays[0]).getDate() ||
+                 now.getDate() === dayBefore(tuesdays[2]).getDate();
+        },
+        message: 'Street Sweeping tonight! Park on the OTHER side.'
+      },
+      secondAndFourthWednesday: {
+        condition: function() {
+          const now = new Date();
+          const wednesdays = getNthDays(now, 3);
+
+          return now.getDate() === dayBefore(wednesdays[1]).getDate() ||
+                 now.getDate() === dayBefore(wednesdays[3]).getDate();
         },
         message: 'Street Sweeping tonight! Park on OUR side.'
       }
@@ -97,7 +104,7 @@ const households = {
           const now = new Date();
           const mondays = getNthDays(now, 1);
 
-          return now.getDate() === mondays[0].getDate();
+          return now.getDate() === dayBefore(mondays[0]).getDate();
         },
         message: 'Street Sweeping tonight! Park on OUR side.'
       },
@@ -106,7 +113,7 @@ const households = {
           const now = new Date();
           const tuesdays = getNthDays(now, 2);
 
-          return now.getDate() === tuesdays[0].getDate();
+          return now.getDate() === dayBefore(tuesdays[0]).getDate();
         },
         message: 'Street Sweeping tonight! Park on the OTHER side.'
       }
@@ -135,7 +142,9 @@ const checkAndSend = households => {
         const numbers = households[household].numbers;
 
         return sendReminders(message, numbers);
-      };
+      } else {
+        console.log('Wrong day. No messages sent.');
+      }
     });
 
     return Promise.all(remindersToSend);
