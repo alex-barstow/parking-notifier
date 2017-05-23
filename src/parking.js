@@ -193,4 +193,13 @@ const checkAndSend = households => {
   return Promise.all(householdReminders);
 };
 
+module.exports = {
+  sendBatch,
+  getNthDays,
+  dayBefore,
+  dayAfter,
+  households,
+  checkAndSend
+};
+
 checkAndSend(households);

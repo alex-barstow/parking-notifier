@@ -12,5 +12,11 @@
     "bluebird": "^3.5.0",
     "dotenv": "^4.0.0",
     "twilio": "^2.11.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.4.1",
+    "pryjs": "^1.0.3",
+    "sinon": "^2.3.0"
   }
 }
