@@ -179,7 +179,11 @@ const checkAndSend = households => {
         const message = households[household].reminders[reminder].message;
         const numbers = households[household].numbers;
 
-        return sendBatch(message, numbers);
+        return sendBatch(message, numbers)
+          .then(() => {
+            console.log(`\n******* Message Sent *******\n\n` +
+              `Household: ${household}\nReminder: ${reminder}`);
+        });
       } else {
         console.log('Wrong day. No messages sent.');
       }
