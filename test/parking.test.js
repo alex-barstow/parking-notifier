@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const parking = require('../src/parking.js');
+const parking = require('../src/parking');
 const pry = require('pryjs');
 
 
@@ -55,7 +55,6 @@ describe('getNthDays()', function() {
   });
 });
 
-// change to check for two separately created adjacent dates
 describe('dayBefore()', function() {
   it('should return a date', function() {
     const date = new Date();
@@ -253,16 +252,40 @@ describe('household reminder condition functions:', function() {
       maySecond.restore();
     });
   });
-})
+});
 
 // use sinon spy here to see how many times sendBatch() is called
 // describe('checkAndSend()', function() {
+//   sinon.stub(parking, "sendBatch", function() {
+//     return new Promise(function(resolve, reject) {
+//       resolve();
+//     });
+//   });
+//
 //   it('should not send any reminders on a day where no condition is true', function() {
 //
+//     // no reminder should be sent on the first Sat
+//     const maySixth = sinon.useFakeTimers(new Date('2017-05-02T01:41:07.511Z').getTime());
+//
+//     return parking.checkAndSend(parking.households)
+//       .then(() => {
+//         return expect(spy.callCount).to.equal(0);
+//       });
+//
+//     maySixth.restore();
 //   });
 //
 //   it('should send as many reminder batches as there are true conditions', function() {
 //
+//     // May 1 was the day before the first Tuesday. 2 reminder batches should be sent.
+//     const mayFirst = sinon.useFakeTimers(new Date('2017-05-02T01:41:07.511Z').getTime());
+//
+//     return parking.checkAndSend(parking.households)
+//       .then(() => {
+//         return expect(spy.callCount).to.equal(5);
+//       });
+//
+//     mayFirst.restore();
 //   });
 //
 //   it(`should only send reminders to those numbers

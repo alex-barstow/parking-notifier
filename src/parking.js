@@ -109,7 +109,6 @@ const households = {
           if (dayAfter(now).getDay() === 1 && dayAfter(now).getDate() === 1) {
             return true;
           }
-          // check if next day = 1 and is the 1st of the Month
 
           const mondays = getNthDays(now, 1);
           // eval(pry.it);
@@ -156,7 +155,6 @@ const sendBatch = (message, numbers) => {
     .then(message => console.log('Message success: ', number))
     .catch(err => console.log('Message Failure:\n', err)));
 
-    console.log('Send batch?');
   return Promise.all(textMessages);
 };
 
