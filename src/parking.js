@@ -1,4 +1,4 @@
-// "use strict";
+"use strict";
 
 console.time('Total Time:');
 
