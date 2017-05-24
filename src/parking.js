@@ -2,7 +2,7 @@
 
 console.time('Total Time:');
 
-const privateVars = require('privateVars');
+const privateVars = require('./privateVars');
 const Promise = require('bluebird');
 const twilio = require('twilio')(privateVars.accountSID, privateVars.authToken);
 
@@ -38,7 +38,7 @@ const dayBefore = date => {
 
 // Returns the {Date} after the provided {date}, even if the day before is
 // in the previous month
-const dayAfter = (date) => {
+const dayAfter = date => {
   let newDate = new Date(date.getTime());
   newDate.setDate(newDate.getDate() + 1);
   return newDate;
