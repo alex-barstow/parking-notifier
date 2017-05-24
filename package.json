@@ -4,7 +4,8 @@
   "description": "sends SMS parking reminders with twilio",
   "main": "parking.js",
   "scripts": {
-    "test": "mocha ./test/**/*.js"
+    "test": "mocha ./test/**/*.js",
+    "build": "cp ./src/parking.js ./package.json ./privateVars.js ./parking-notifier-build"
   },
   "author": "Alex Barstow",
   "license": "ISC",
