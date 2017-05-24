@@ -109,7 +109,7 @@ const households = {
           }
 
           const mondays = getNthDays(now, 1);
-          // eval(pry.it);
+
           return now.getDate() === dayBefore(mondays[0]).getDate();
         },
         message: 'Street Sweeping tonight! Park on OUR side.'
