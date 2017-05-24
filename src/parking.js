@@ -2,9 +2,9 @@
 
 console.time('Total Time:');
 
-const dotenv = require('dotenv').config();
+const privateVars = require('privateVars');
 const Promise = require('bluebird');
-const twilio = require('twilio')(process.env.accountSID, process.env.authToken);
+const twilio = require('twilio')(privateVars.accountSID, privateVars.authToken);
 
 
 // Returns an array of {Date} objects representing all of a given dayOfTheWeek
@@ -53,11 +53,10 @@ const dayAfter = (date) => {
 const households = {
   wallaceStreet: {
     numbers: [
-      '+15087338306'
-      // process.env.alex,
-      // process.env.julia,
-      // process.env.pat,
-      // process.env.peter
+      privateVars.alex,
+      privateVars.julia,
+      privateVars.pat,
+      privateVars.peter
     ],
 
     // these conditions should return true one day before those in the name
@@ -95,10 +94,9 @@ const households = {
   },
   harvardStreet: {
     numbers: [
-      '+15087338306'
-      // process.env.zach,
-      // process.env.pete,
-      // process.env.aristide
+      privateVars.zach,
+      privateVars.pete,
+      privateVars.aristide
     ],
     reminders: {
       firstMonday: {
