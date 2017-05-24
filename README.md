@@ -29,3 +29,9 @@ module.exports = {
 ```
 ### Testing
 Run `npm run test` to run all tests in the `test` directory. There are some tests now but more are needed.
+
+### Execution
+I schedule `parking.js` to execute every day at 6pm:
+```
+0 18 * * * full-path-to-node full-path-to-parking.js
+```
