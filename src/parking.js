@@ -37,7 +37,7 @@ const dayBefore = date => {
 };
 
 // Returns the {Date} after the provided {date}, even if the day after is
-// in the previous month
+// in the next month
 const dayAfter = date => {
   let newDate = new Date(date.getTime());
   newDate.setDate(newDate.getDate() + 1);
